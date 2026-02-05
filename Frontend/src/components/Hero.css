@@ -1,13 +1,25 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
 
 .hero {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: white;
-  padding-top: 4rem;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
 }
@@ -103,8 +115,90 @@
   .hero h1 {
     font-size: 2.5rem;
   }
-
   .hero p {
     font-size: 1rem;
   }
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.navbar-links a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: #FF9933;
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  transition: background 0.3s, color 0.3s;
+}
+
+.button-dark {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.button-dark:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.button-fire {
+  background: #FF9933;
+  color: white;
+}
+
+.button-fire:hover {
+  background: #FFD700;
 }
