@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RiffHub")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+714b2e1da8b6172fd6c928c12f820abaea4be4a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08b8b4b3817f0cbdbe461456514bb8832fad4a5e")]
 [assembly: System.Reflection.AssemblyProductAttribute("RiffHub")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RiffHub")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
