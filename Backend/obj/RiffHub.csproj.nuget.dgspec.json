@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\RiffHub.csproj": {}
+    "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\Backend\\RiffHub.csproj": {}
   },
   "projects": {
-    "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\RiffHub.csproj": {
+    "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\Backend\\RiffHub.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\RiffHub.csproj",
+        "projectUniqueName": "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\Backend\\RiffHub.csproj",
         "projectName": "RiffHub",
-        "projectPath": "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\RiffHub.csproj",
+        "projectPath": "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\Backend\\RiffHub.csproj",
         "packagesPath": "C:\\Users\\horia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\obj\\",
+        "outputPath": "C:\\Users\\horia\\OneDrive\\Desktop\\RiffHub\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

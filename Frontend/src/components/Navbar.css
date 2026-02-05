@@ -1,0 +1,65 @@
+/* Navbar.css */
+
+/* Reset some defaults */
+* {
+  box-sizing: border-box;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.7); /* transparent with blur */
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #333;
+  z-index: 1000;
+  font-family: 'Inter', sans-serif;
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+}
+
+.navbar .logo .icon {
+  height: 2rem;
+  width: 2rem;
+  color: #FFD700; /* golden yellow */
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #FFD700;
+}
+
+/* Responsive menu for small screens */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+}
