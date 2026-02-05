@@ -1,5 +1,8 @@
+# .NET build folders
 Backend/bin/
 Backend/obj/
 
+# Optional caches
 *.cache
 *.editorconfig
+
