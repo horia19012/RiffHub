@@ -1,6 +1,6 @@
 # .NET build folders
-Backend/bin/
-Backend/obj/
+api/bin/
+api/obj/
 
 # Optional caches
 *.cache
