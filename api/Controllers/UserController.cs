@@ -22,15 +22,15 @@ namespace api.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{id}")] 
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
             var user = await _service.GetUserByIdAsync(id);
             if (user == null) return NotFound();
             return Ok(user);
         }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> Add(User user)
         {
             if (string.IsNullOrWhiteSpace(user.Username) ||
@@ -42,6 +42,22 @@ namespace api.Controllers
 
             var newUser = await _service.AddUserAsync(user);
             return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(User user, Guid id)
+        {
+            var updated = await _service.UpdateAsync(id, user);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted) return NotFound();
+            return NoContent();
         }
     }
 }
