@@ -1,16 +1,18 @@
-using api.Models;
+using api.Models.Enums;
+using System;
+
 namespace api.Models
 {
     public class Reaction
     {
-        public int Id { get; set; }
-        public bool IsLike { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        public int UserId { get; set; }
-        public User User { get; set; } = null!;
+        public Guid UserId { get; set; }
+        public Guid RiffId { get; set; }
 
-        public int RiffId { get; set; }
-        public Riff Riff { get; set; } = null!;
+        public ReactionType Type { get; set; }
+
+        public User? User { get; set; }
+        public Riff? Riff { get; set; }
     }
 }
