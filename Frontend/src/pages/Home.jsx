@@ -1,10 +1,11 @@
-const Index = () => {
+import Hero from "../components/Hero";
+
+const Home = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       <Hero />
     </div>
   );
 };
 
-export default Index;
+export default Home;
