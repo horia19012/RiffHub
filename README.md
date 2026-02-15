@@ -7,7 +7,7 @@ It allows musicians to **record, share, monetize, and collaborate** around origi
 
 ## Overview
 
-RiffConnect enables guitarists to:  
+RiffHub enables guitarists to:  
 
 - Record and upload guitar riffs  
 - Receive ratings and comments from other users  
