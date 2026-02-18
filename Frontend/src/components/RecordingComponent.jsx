@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Mic, Square, Play, Pause, RotateCcw, Trash2 } from "lucide-react";
 import "./RecordingComponent.css";
+import RiffService from "../services/RiffService";
 
 const BAR_COUNT = 40;
 
@@ -11,9 +12,7 @@ export default function RecordingComponent() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [waveformData, setWaveformData] = useState(
-    Array(BAR_COUNT).fill(0.05)
-  );
+  const [waveformData, setWaveformData] = useState(Array(BAR_COUNT).fill(0.05));
   const [recordedWaveform, setRecordedWaveform] = useState(null);
   const [recordingTime, setRecordingTime] = useState(0);
 
@@ -28,15 +27,15 @@ export default function RecordingComponent() {
   const recordingTimerRef = useRef(null);
 
   const startVisualization = (stream) => {
-    audioContextRef.current = new (window.AudioContext ||
-      window.webkitAudioContext)();
+    audioContextRef.current = new (
+      window.AudioContext || window.webkitAudioContext
+    )();
 
     analyserRef.current = audioContextRef.current.createAnalyser();
     analyserRef.current.fftSize = 256;
     analyserRef.current.smoothingTimeConstant = 0.85;
 
-    const source =
-      audioContextRef.current.createMediaStreamSource(stream);
+    const source = audioContextRef.current.createMediaStreamSource(stream);
 
     source.connect(analyserRef.current);
 
@@ -78,7 +77,7 @@ export default function RecordingComponent() {
     for (let i = 0; i < BAR_COUNT; i++) {
       const start = i * segmentSize;
       const end = Math.min(start + segmentSize, history.length);
-      
+
       if (start >= history.length) {
         processed.push(0.05);
         continue;
@@ -86,7 +85,8 @@ export default function RecordingComponent() {
 
       let maxAmplitude = 0;
       for (let j = start; j < end; j++) {
-        const avg = history[j].reduce((sum, val) => sum + val, 0) / history[j].length;
+        const avg =
+          history[j].reduce((sum, val) => sum + val, 0) / history[j].length;
         maxAmplitude = Math.max(maxAmplitude, avg);
       }
 
@@ -107,7 +107,7 @@ export default function RecordingComponent() {
 
       recordingStartTimeRef.current = Date.now();
       setRecordingTime(0);
-      
+
       recordingTimerRef.current = setInterval(() => {
         const elapsed = (Date.now() - recordingStartTimeRef.current) / 1000;
         setRecordingTime(elapsed);
@@ -129,11 +129,10 @@ export default function RecordingComponent() {
 
         stream.getTracks().forEach((t) => t.stop());
 
-        if (audioContextRef.current)
-          audioContextRef.current.close();
+        if (audioContextRef.current) audioContextRef.current.close();
 
         cancelAnimationFrame(animationFrameRef.current);
-        
+
         if (recordingTimerRef.current) {
           clearInterval(recordingTimerRef.current);
           recordingTimerRef.current = null;
@@ -179,7 +178,7 @@ export default function RecordingComponent() {
     setWaveformData(Array(BAR_COUNT).fill(0.05));
     setRecordedWaveform(null);
     waveformHistoryRef.current = [];
-    
+
     if (recordingTimerRef.current) {
       clearInterval(recordingTimerRef.current);
       recordingTimerRef.current = null;
@@ -191,9 +190,20 @@ export default function RecordingComponent() {
 
     const timestamp = (index / BAR_COUNT) * duration;
     audioRef.current.currentTime = timestamp;
-    
+
     if (!isPlaying) {
       playAudio();
+    }
+  };
+
+  const handleUpload = async () => {
+    try {
+      const result = await RiffService.uploadRecording(audioBlob);
+      alert("Uploaded successfully!");
+      console.log("Blob URL:", result.url);
+    } catch (error) {
+      console.error(error);
+      alert("Upload failed");
     }
   };
 
@@ -236,37 +246,39 @@ export default function RecordingComponent() {
               {isRecording
                 ? "Recording..."
                 : audioURL
-                ? "Your Recording"
-                : "Riff Recorder"}
+                  ? "Your Recording"
+                  : "Riff Recorder"}
             </h2>
             <p className="recorder-subtitle">
               {isRecording
                 ? "Play something!"
                 : audioURL
-                ? "Click waveform to seek"
-                : "Tap mic to start"}
+                  ? "Click waveform to seek"
+                  : "Tap mic to start"}
             </p>
           </div>
 
-          <div className={`waveform-container ${audioURL ? 'clickable' : ''}`}>
+          <div className={`waveform-container ${audioURL ? "clickable" : ""}`}>
             {audioURL && (
-              <div 
+              <div
                 className="waveform-progress"
                 style={{ width: `${getProgressPercentage()}%` }}
               />
             )}
-            
-            {(audioURL ? recordedWaveform || waveformData : waveformData).map((v, i) => (
-              <div
-                key={i}
-                className={`waveform-bar ${audioURL ? 'interactive' : ''}`}
-                style={{
-                  height: `${v * 120}px`,
-                  opacity: isRecording ? 1 : audioURL ? 0.8 : 0.6,
-                }}
-                onClick={() => audioURL && handleWaveformClick(i)}
-              />
-            ))}
+
+            {(audioURL ? recordedWaveform || waveformData : waveformData).map(
+              (v, i) => (
+                <div
+                  key={i}
+                  className={`waveform-bar ${audioURL ? "interactive" : ""}`}
+                  style={{
+                    height: `${v * 120}px`,
+                    opacity: isRecording ? 1 : audioURL ? 0.8 : 0.6,
+                  }}
+                  onClick={() => audioURL && handleWaveformClick(i)}
+                />
+              ),
+            )}
           </div>
 
           {(isRecording || audioURL) && (
@@ -275,11 +287,9 @@ export default function RecordingComponent() {
                 {isRecording
                   ? formatTime(recordingTime)
                   : audioURL
-                  ? formatTime(currentTime)
-                  : "0:00"}
-                {audioURL &&
-                  duration > 0 &&
-                  ` / ${formatTime(duration)}`}
+                    ? formatTime(currentTime)
+                    : "0:00"}
+                {audioURL && duration > 0 && ` / ${formatTime(duration)}`}
               </p>
             </div>
           )}
@@ -287,60 +297,39 @@ export default function RecordingComponent() {
           <div className="controls-container">
             {!audioURL ? (
               !isRecording ? (
-                <button
-                  onClick={startRecording}
-                  className="btn-record"
-                >
+                <button onClick={startRecording} className="btn-record">
                   <Mic size={32} />
                 </button>
               ) : (
-                <button
-                  onClick={stopRecording}
-                  className="btn-stop"
-                >
+                <button onClick={stopRecording} className="btn-stop">
                   <Square size={32} />
                 </button>
               )
             ) : (
               <div className="playback-controls">
-                <button
-                  onClick={retryRecording}
-                  className="btn-retry"
-                >
+                <button onClick={retryRecording} className="btn-retry">
                   <RotateCcw size={24} />
                 </button>
 
                 <button
-                  onClick={
-                    isPlaying
-                      ? pauseAudio
-                      : playAudio
-                  }
+                  onClick={isPlaying ? pauseAudio : playAudio}
                   className="btn-play"
                 >
-                  {isPlaying ? (
-                    <Pause size={32} />
-                  ) : (
-                    <Play size={32} />
-                  )}
+                  {isPlaying ? <Pause size={32} /> : <Play size={32} />}
                 </button>
 
-                <button
-                  onClick={retryRecording}
-                  className="btn-delete"
-                >
+                <button onClick={retryRecording} className="btn-delete">
                   <Trash2 size={24} />
+                </button>
+                <button onClick={handleUpload} className="btn-save">
+                  Save to Cloud
                 </button>
               </div>
             )}
           </div>
 
           {audioURL && (
-            <audio
-              ref={audioRef}
-              src={audioURL}
-              className="hidden-audio"
-            />
+            <audio ref={audioRef} src={audioURL} className="hidden-audio" />
           )}
         </div>
 
