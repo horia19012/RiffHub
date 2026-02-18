@@ -1,8 +1,11 @@
 # .NET build folders
-api/bin/
-api/obj/
+/api/bin/
+/api/obj/
 
 # Optional caches
 *.cache
 *.editorconfig
+
+/api/.env
+*.env
 

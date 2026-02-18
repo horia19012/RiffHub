@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
+using Azure.Storage.Blobs;
 
 namespace api.Controllers
 {
@@ -9,10 +10,14 @@ namespace api.Controllers
     public class RiffController : ControllerBase
     {
         private readonly IRiffService _service;
+        private readonly BlobStorageService _blobStorageService;
 
-        public RiffController(IRiffService service)
+
+
+        public RiffController(IRiffService service, BlobStorageService blobStorageService)
         {
             _service = service;
+            _blobStorageService = blobStorageService;
         }
 
         // GET: api/riff
@@ -52,6 +57,17 @@ namespace api.Controllers
             var deleted = await _service.DeleteAsync(id);
             if (!deleted) return NotFound();
             return NoContent();
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var url = await _blobStorageService.UploadAsync(file);
+
+            return Ok(new { url });
         }
     }
 }
