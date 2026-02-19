@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace api.Controllers
 {
@@ -19,9 +21,9 @@ namespace api.Controllers
             _service = service;
             _blobStorageService = blobStorageService;
         }
-
-        // GET: api/riff
+        
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var riffs = await _service.GetAllAsync();
@@ -37,6 +39,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(Riff riff)
         {
             var added = await _service.AddAsync(riff);

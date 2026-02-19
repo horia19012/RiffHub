@@ -18,7 +18,26 @@ class RiffService {
       throw new Error("Upload failed");
     }
 
-    return await response.json(); 
+    return await response.json();
+  }
+
+  async getAllRiffs() {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No auth token found");
+
+    const response = await fetch(`${API_BASE_URL}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
   }
 }
 
