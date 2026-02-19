@@ -49,6 +49,26 @@
   color: #FFD700;
 }
 
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0;
+}
+
+.logout-btn:hover {
+  color: #FFD700;
+}
+
+.logout-btn:focus {
+  outline: none;
+}
+
+
 .desktop-only {
   display: flex;
   gap: 2rem;
