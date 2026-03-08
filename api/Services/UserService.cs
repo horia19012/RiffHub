@@ -73,7 +73,11 @@ namespace api.Services
 
             existing.Username = user.Username;
             existing.Email = user.Email;
-            existing.Password = user.Password;
+
+            if (!string.IsNullOrWhiteSpace(user.Password))
+            {
+                existing.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            }
 
             await _db.SaveChangesAsync();
             return existing;
