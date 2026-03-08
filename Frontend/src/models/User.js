@@ -1,30 +1,17 @@
-
 export class User {
-  /**
-   * @param {Object} data
-   * @param {string}   data.id       
-   * @param {string}   data.username
-   * @param {string}   data.email
-   * @param {string}   [data.password] 
-   * @param {Riff[]}   [data.riffs]
-   * @param {Comment[]}  [data.comments]
-   * @param {Reaction[]} [data.reactions]
-   * @param {User[]}   [data.friends]
-   */
   constructor({
-    id         = crypto.randomUUID(),
-    username   = '',
-    email      = '',
-    password   = '',
-    riffs      = [],
-    comments   = [],
-    reactions  = [],
-    friends    = [],
+    id        = crypto.randomUUID(),
+    username  = '',
+    email     = '',
+    riffs     = [],
+    comments  = [],
+    reactions = [],
+    friends   = [],
   } = {}) {
     this.id        = id;
     this.username  = username;
     this.email     = email;
-    this.password  = password;   
+    this.riffs     = riffs;
     this.comments  = comments;
     this.reactions = reactions;
     this.friends   = friends;
@@ -43,19 +30,11 @@ export class User {
   }
 
   toJSON() {
-    return {
-      id:        this.id,
-      username:  this.username,
-      email:     this.email,
-    };
+    return { id: this.id, username: this.username, email: this.email };
   }
 
-  toRegisterPayload() {
-    return {
-      username: this.username,
-      email:    this.email,
-      password: this.password,
-    };
+  static toRegisterPayload(username, email, password) {
+    return { username, email, password };
   }
 }
 

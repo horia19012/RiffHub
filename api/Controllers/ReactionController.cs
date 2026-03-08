@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using api.Models;
+using api.Models.Enums;
 using api.Services;
+using System.Security.Claims;
 
 namespace api.Controllers
 {
@@ -16,13 +19,15 @@ namespace api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var reactions = await _service.GetAllAsync();
             return Ok(reactions);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             var reaction = await _service.GetByIdAsync(id);
@@ -31,26 +36,32 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Reaction reaction)
+        [Authorize]
+        public async Task<IActionResult> Add([FromBody] ReactionRequest request)
         {
-            var added = await _service.AddAsync(reaction);
-            return CreatedAtAction(nameof(GetById), new { id = added.Id }, added);
+            var userId = GetUserId();
+            if (userId == null) return Unauthorized("Invalid token.");
+
+            var result = await _service.UpsertAsync(userId.Value, request.RiffId, request.Type);
+            return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, Reaction reaction)
-        {
-            var updated = await _service.UpdateAsync(id, reaction);
-            if (updated == null) return NotFound();
-            return Ok(updated);
-        }
-
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var deleted = await _service.DeleteAsync(id);
             if (!deleted) return NotFound();
             return NoContent();
         }
+
+        private Guid? GetUserId()
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier)
+                     ?? User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub);
+            return claim != null && Guid.TryParse(claim.Value, out var id) ? id : null;
+        }
     }
+
+    public record ReactionRequest(Guid RiffId, ReactionType Type);
 }
