@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import './AuthPage.css';
 import AuthService from '../services/AuthService.jsx';
-import User from '../models/User.js';
 import { useNavigate } from 'react-router-dom';
 
 function getStrength(password) {
@@ -47,6 +46,9 @@ function LoginForm({ onSwitch }) {
     try {
       const data = await AuthService.login(fields.email, fields.password);
       localStorage.setItem('token', data.token);
+
+      const payload = JSON.parse(atob(data.token.split('.')[1]));
+      localStorage.setItem('userId', payload.sub);
 
       setAlert({ type: 'success', msg: 'Signed in successfully!' });
       navigate("/");
@@ -144,7 +146,6 @@ function RegisterForm({ onSwitch }) {
 
     try {
       await AuthService.register(fields.username, fields.email, fields.password);
-
       setAlert({ type: 'success', msg: 'Account created! You can now sign in.' });
       setTimeout(() => onSwitch('login'), 1800);
     } catch (err) {

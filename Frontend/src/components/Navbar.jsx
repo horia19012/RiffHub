@@ -79,14 +79,9 @@ const Navbar = () => {
             <Link to="/account" onClick={() => setMobileMenuOpen(false)}>
               Account
             </Link>
-            <button
-              onClick={() => {
-                handleLogout();
-                setMobileMenuOpen(false);
-              }}
-            >
+            <Link to="/" onClick={() => handleLogout()}>
               Log Out
-            </button>
+            </Link>
           </>
         ) : (
           <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>

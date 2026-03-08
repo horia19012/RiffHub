@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
 import Hero from "../components/Hero";
 import RiffService from "../services/RiffService";
+import "./Home.css";
+
+const RiffCard = ({ riff }) => (
+  <div className="riff-card">
+    <div className="riff-card__meta">
+      <span className="riff-card__date">
+        {new Date(riff.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+      </span>
+      <span className="riff-card__reactions">
+        🔥 {riff.reactionIds?.length ?? 0} &nbsp; 💬 {riff.commentIds?.length ?? 0}
+      </span>
+    </div>
+    <audio className="riff-card__audio" src={riff.url} controls preload="none" />
+  </div>
+);
 
 const Home = () => {
   const [riffs, setRiffs] = useState([]);
@@ -9,54 +24,23 @@ const Home = () => {
 
   useEffect(() => {
     const fetchRiffs = async () => {
-      const token = localStorage.getItem("token"); // get JWT from local storage
-      if (!token) {
-        setError("You are not logged in");
-        setLoading(false);
-        return;
-      }
-
+      const token = localStorage.getItem("token");
+      if (!token) { setError("You are not logged in. Sign in to see riffs."); setLoading(false); return; }
       try {
-        const data = await RiffService.getAllRiffs(token);
-        if (!data || data.length === 0) {
-          setRiffs([]);
-        } else {
-          setRiffs(data);
-        }
+        const data = await RiffService.getAllRiffs();
+        setRiffs(data ?? []);
       } catch (err) {
-        console.error("Failed to fetch riffs:", err);
-        setError("Failed to load riffs");
+        setError("Failed to load riffs. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchRiffs();
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="home">
       <Hero />
-
-      <h2 className="text-2xl font-bold mt-8 mb-4">Riffs</h2>
-
-      {loading && <p>Loading riffs...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      {!loading && riffs.length === 0 && !error && (
-        <p className="text-gray-500">No riffs available yet.</p>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {riffs.map((riff) => (
-          <div
-            key={riff.id}
-            className="border rounded-lg p-4 shadow hover:shadow-lg transition"
-          >
-            <h3 className="text-xl font-semibold">{riff.id || "Untitled Riff"}</h3>
-            <p className="text-gray-700">{riff.url || "No description"}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
